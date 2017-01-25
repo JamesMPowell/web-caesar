@@ -19,15 +19,20 @@ import caesar
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        message = 'Helloooooooo world!'
-        encrypted_message = caesar.encrypt(message,13)
-
-        textarea = "<textarea>"+ encrypted_message+ "</textarea>"
-        submit = "<br><input type='submit'/>"
-        form = "<form>"+textarea + submit +"</form>"
+           
+        rotation_input = "<input type='number' name='rotation'/>"
+        textarea = "<textarea name='message'></textarea>"
+        submit = "<input type='submit'/>"
+        form = "<form method='post'>"+rotation_input + textarea + "<br>" + submit +"</form>"
         self.response.write(form)
+    
+    def post(self):
+        message = self.request.get("message")
+        rotation = int(self.request.get("rotation"))
+        encrypted_message = caesar.encrypt(message, rotation)
+        self.response.write("Secret Message:" + encrypted_message)
 
 
-app = webapp2.WSGIApplication([
-    ('/', MainHandler)
-], debug=True)
+app = webapp2.WSGIApplication( [
+    ('/', MainHandler) 
+    ] , debug=True)
